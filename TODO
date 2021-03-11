@@ -1,0 +1,11 @@
+Prio:
+- Variabelt antal inputs för vänster axel
+- Variabelt antal inputs för höger axel
+- Möjlighet att namnge inputs
+- Olika typer "observations"
+- Svartvit toggle
+
+Senare:
+- Bättre layout
+- Testa d3 för att undvika alla hacks
+- Typescript
