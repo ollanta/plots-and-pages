@@ -19,7 +19,7 @@
         y: example.y,
         showlegend: true,
         visible: 'legendonly',
-        opacity: 0.8,
+        opacity: 0.3,
         mode: 'markers',
         marker: {
           color: colorMap[k],
@@ -57,9 +57,10 @@
 	    overlaying: 'x',
 	    matches: 'x',
 	    tickvals: lineData.times,
-	    ticktext: lineData.names,
+	    ticktext: lineData.names.map(n => ' ' + n),
 	    showgrid: false,
 	    tickangle: 90,
+	    automargin: true,
 	  },
 	  yaxis: {
 	    title: LeftAxis.legend,
@@ -72,6 +73,7 @@
 	    rangemode: 'tozero',
 	  },
       legend: {
+        x: 1.05,
         itemclick: false,
         itemdoubleclick: false,
       },
