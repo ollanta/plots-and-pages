@@ -1,11 +1,11 @@
 <script>
   export let table = [];
 
-  var text = table.map(function(row) { return row.join(","); }).join("\n");
+  let text = table.map(row => row.join(",")).join("\n");
 
   $: {
-    var rows = text.trim().split("\n")
-    table = rows.map(function(row) {return row.split(",")});
+    let rows = text.trim().split("\n")
+    table = rows.map(row => row.split(","));
   }
 </script>
 

@@ -2,7 +2,7 @@
   export let data;
   export let layout;
 
-  var initialized;
+  let initialized;
 
   function scriptlyLoaded() {
 	Plotly.newPlot('plotly-graph', data, layout);

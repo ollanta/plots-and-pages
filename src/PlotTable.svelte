@@ -4,28 +4,26 @@
   export let data;
   let name = data.name;
 
-  let rawTable = data.x.map(function(v,i) {
-    return [v, data.y[i]]
-  });
+  let rawTable = data.x.map((v,i) => [v, data.y[i]]);
 
   function transformScatter(rawtable) {
-    var xy = {
+    let xy = {
       x: [],
       y: [],
     };
 
-    rawtable.forEach(function(rawrow) {
+    rawtable.forEach(rawrow => {
       if (rawrow.length >= 2) {
         xy.x.push(rawrow[0]);
         xy.y.push(Number(rawrow[1]));
-      }      
+      }
     });
 
     return xy;
   }
 
   $: {
-    var xy = transformScatter(rawTable);
+    let xy = transformScatter(rawTable);
     data.x = xy.x;
     data.y = xy.y;
   }
