@@ -9,8 +9,14 @@
     initialized = true;
   }
 
+  let timeout;
+
   $: if (initialized) {
-    Plotly.react('plotly-graph', data, layout);
+    // debounce updates
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      Plotly.react('plotly-graph', data, layout)
+    }, 500);
   }
 </script>
 

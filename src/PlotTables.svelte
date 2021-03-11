@@ -2,18 +2,17 @@
   import PlotTable from './PlotTable.svelte';
 
   export let data;
-  export let name;
   let legend = data.legend;
 
   var nextId = 1;
   data.tables.forEach(t => t.id = nextId++);
 
   function newTable() {
-    data = [...data, {x: [], y: [], name: getName("new"), id: nextId++}]
+    data.tables = [...data.tables, {x: [], y: [], name: getName("new"), id: nextId++}]
   }
 
   function getName(suggestion) {
-    if (data.some(m => m.name == suggestion)) {
+    if (data.tables.some(m => m.name == suggestion)) {
       return getName(suggestion + "'");
     } else {
       return suggestion;
@@ -29,9 +28,9 @@
 </script>
 
 <input bind:value={legend}/>
-{#each data.tables as table (table.id)}
+{#each data.tables as table, idx (table.id)}
   <PlotTable bind:data={table}>
-    <button on:click="{() => removeTable(1)}" disabled="{data.length == 1}">-</button>
+    <button on:click="{() => removeTable(idx)}" disabled="{data.tables.length == 1}">-</button>
   </PlotTable>
 {/each}
 <button on:click="{newTable}">+</button>
