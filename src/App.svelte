@@ -35,10 +35,14 @@
 
 <div style="display: flex;">
   <div style="display: flex; flex-direction: column; flex: 20%;">
-    <PlotTables bind:data={LeftAxis} name="Left axis data"/>
-    <PlotTables bind:data={RightAxis} name="Right axis data"/>
-    <StopTable bind:data={Observations} name="Observations" keys="{['name', 'time']}"/>
-    <StopTable bind:data={Treatments} name="Treatments" keys="{['name', 'start', 'end']}"/>
+    <h3>Left axis data</h3>
+    <PlotTables bind:data={LeftAxis}/>
+    <h3>Right axis data</h3>
+    <PlotTables bind:data={RightAxis}/>
+    <h3>Observations</h3>
+    <StopTable bind:data={Observations} keys="{['name', 'time']}"/>
+    <h3>Treatments</h3>
+    <StopTable bind:data={Treatments} keys="{['name', 'start', 'end']}"/>
   </div>
 
   <div style="flex: 70%">

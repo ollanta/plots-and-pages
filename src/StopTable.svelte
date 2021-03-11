@@ -1,7 +1,6 @@
 <script>
   import Table from './Table.svelte';
 
-  export let name;
   export let data;
   export let keys;
 
@@ -30,5 +29,4 @@
   $: data = transformStops(rawTable);
 </script>
 
-<h3>{name}</h3>
 <Table bind:table={rawTable}/>

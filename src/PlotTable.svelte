@@ -1,8 +1,8 @@
 <script>
   import Table from './Table.svelte';
 
-  export let name;
   export let data;
+  let name = data.name;
 
   let rawTable = data.x.map(function(v,i) {
     return [v, data.y[i]]
