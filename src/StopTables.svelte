@@ -2,21 +2,12 @@
   import StopTable from './StopTable.svelte';
 
   export let data;
-  export let keys;
 
   var nextId = 1;
   data.tables.forEach(t => t.id = nextId++);
 
   function newTable() {
-    data = [...data, {x: [], y: [], name: getName("new"), id: nextId++}]
-  }
-
-  function getName(suggestion) {
-    if (data.some(m => m.name == suggestion)) {
-      return getName(suggestion + "'");
-    } else {
-      return suggestion;
-    }
+    data.tables = [...data.tables, {data: [], id: nextId++}]
   }
 
   function removeTable(idx) {
@@ -26,9 +17,9 @@
 
 </script>
 
-{#each data.tables as table (table.id)}
-  <StopTable bind:data={table} name={table.name}>
-    <button on:click="{() => removeTable(1)}" disabled="{data.length == 1}">-</button>
+{#each data.tables as table, idx (table.id)}
+  <StopTable bind:data={table.data} keys={data.keys}>
+    <button on:click="{() => removeTable(idx)}" disabled="{data.tables.length == 1}">-</button>
   </StopTable>
 {/each}
 <button on:click="{newTable}">+</button>

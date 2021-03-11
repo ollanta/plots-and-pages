@@ -47,7 +47,7 @@
   
   var layout;
   $: {
-    var lineData = getLineData(Observations);
+    var lineData = getLineData(Observations.tables);
     var rects = getRectData(Treatments).rects;
 
     layout = {
@@ -83,8 +83,14 @@
   }
 
   function getLineData(observations) {
+    let dashtypes = ["dot", "dash", "longdash", "dashdot", "longdashdot"];
+    let obslines = observations.reduce((acc, table, idx) => acc.concat(table.data.map(d => ({
+        dash: dashtypes[idx],
+        time: d.time,
+        name: d.name
+    }))), []);
     return {
-      lines: observations.map(function(tr) {
+      lines: obslines.map(function(tr) {
 	    return {
 	      type: 'line',
 	      xref: 'x',
@@ -95,12 +101,12 @@
 	      y1: 1,
 	      line: {
 		    width: 2,
-		    dash: 'dash',
+		    dash: tr.dash,
 	      }
 	    }
       }),
-      times: observations.map(function(tr) { return tr.time; }),
-      names: observations.map(function(tr) { return tr.name; })
+      times: obslines.map(function(tr) { return tr.time; }),
+      names: obslines.map(function(tr) { return tr.name; })
     };
   }
 

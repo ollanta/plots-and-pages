@@ -2,6 +2,7 @@
   import Graph from './Graph.svelte';
   import PlotTables from './PlotTables.svelte';
   import StopTable from './StopTable.svelte';
+  import StopTables from './StopTables.svelte';
   
   var LeftAxis = {
     legend: "Värde - ddPCR",
@@ -21,10 +22,13 @@
     }]
   };
 
-  var Observations = [
-    {name: 'A', time: '2020-01-03'},
-    {name: 'B', time: '2020-01-18'},
-  ];
+  var Observations = {
+    keys: ['name', 'time'],
+    tables: [{
+      data: [{name: 'A', time: '2020-01-03'},
+             {name: 'B', time: '2020-01-18'}]
+    }],
+  };
 
   var Treatments = [
 	{name: 'Taf', start: '2020-01-05', end: '2020-01-14'},
@@ -40,7 +44,7 @@
     <h3>Right axis data</h3>
     <PlotTables bind:data={RightAxis}/>
     <h3>Observations</h3>
-    <StopTable bind:data={Observations} keys="{['name', 'time']}"/>
+    <StopTables bind:data={Observations}/>
     <h3>Treatments</h3>
     <StopTable bind:data={Treatments} keys="{['name', 'start', 'end']}"/>
   </div>
