@@ -6,6 +6,7 @@
 
   function scriptlyLoaded() {
 	Plotly.newPlot('plotly-graph', data, layout);
+    fixOpacity();
     initialized = true;
   }
 
