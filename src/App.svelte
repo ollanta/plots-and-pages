@@ -4,7 +4,7 @@
   import StopTable from './StopTable.svelte';
   import StopTables from './StopTables.svelte';
   
-  var LeftAxis = {
+  let LeftAxis = {
     legend: "Värde - ddPCR",
     tables: [{
       x: ['2020-01-01', '2020-01-15', '2020-01-28'],
@@ -13,7 +13,7 @@
     }]
   };
 
-  var RightAxis = {
+  let RightAxis = {
     legend: "Värde - LD",
     tables: [{
 	  x: ['2020-01-01', '2020-01-15', '2020-02-01'],
@@ -22,7 +22,7 @@
     }]
   };
 
-  var Observations = {
+  let Observations = {
     keys: ['name', 'time'],
     tables: [{
       data: [{name: 'A', time: '2020-01-03'},
@@ -30,7 +30,7 @@
     }],
   };
 
-  var Treatments = [
+  let Treatments = [
 	{name: 'Taf', start: '2020-01-05', end: '2020-01-14'},
 	{name: 'Taf+Mek', start: '2020-01-14', end: '2020-01-20'},
 	{name: 'Taf', start: '2020-01-20', end: '2020-02-02'},

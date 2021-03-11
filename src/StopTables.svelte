@@ -3,7 +3,7 @@
 
   export let data;
 
-  var nextId = 1;
+  let nextId = 1;
   data.tables.forEach(t => t.id = nextId++);
 
   function newTable() {

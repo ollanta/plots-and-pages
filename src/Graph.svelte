@@ -6,16 +6,15 @@
   export let Observations;
   export let Treatments;
 
-  var example = LeftAxis.tables[0];
+  let example = LeftAxis.tables[0];
 
-  var data;
+  let data;
 
   $: {
     RightAxis.tables.forEach(d => d['yaxis'] = 'y2');
 
-    var colorMap = getRectData(Treatments).colorMap;
-    var colorMapDummies = Object.keys(colorMap).map(function(k) {
-      return {
+    let colorMap = getRectData(Treatments).colorMap;
+    let colorMapDummies = Object.keys(colorMap).map(k => ({
         x: example.x,
         y: example.y,
         showlegend: true,
@@ -28,9 +27,7 @@
           size: 15,
         },
         name: k
-      }
-    });
-
+    }));
 
     data = [
 	  ...LeftAxis.tables,
@@ -45,10 +42,10 @@
     ].concat(colorMapDummies);
   }
   
-  var layout;
+  let layout;
   $: {
-    var lineData = getLineData(Observations.tables);
-    var rects = getRectData(Treatments).rects;
+    let lineData = getLineData(Observations.tables);
+    let rects = getRectData(Treatments).rects;
 
     layout = {
 	  xaxis: {
@@ -90,31 +87,29 @@
         name: d.name
     }))), []);
     return {
-      lines: obslines.map(function(tr) {
-	    return {
-	      type: 'line',
-	      xref: 'x',
-	      yref: 'paper',
-	      x0: tr.time,
-	      x1: tr.time,
-	      y0: 0,
-	      y1: 1,
-	      line: {
-		    width: 2,
-		    dash: tr.dash,
-	      }
+      lines: obslines.map(tr => ({
+	    type: 'line',
+	    xref: 'x',
+	    yref: 'paper',
+	    x0: tr.time,
+	    x1: tr.time,
+	    y0: 0,
+	    y1: 1,
+	    line: {
+		  width: 2,
+		  dash: tr.dash,
 	    }
-      }),
-      times: obslines.map(function(tr) { return tr.time; }),
-      names: obslines.map(function(tr) { return tr.name; })
+	  })),
+      times: obslines.map(tr => tr.time),
+      names: obslines.map(tr => tr.name)
     };
   }
 
   function getRectData(treatments) {
-    var colors = ['blue', 'red', 'green'];
-    var colorMap = {}
+    let colors = ['blue', 'red', 'green'];
+    let colorMap = {}
 
-    treatments.forEach(function(value) {
+    treatments.forEach(value => {
       if (!colorMap[value.name]) {
         colorMap[value.name] = colors.pop();
       }
@@ -122,22 +117,20 @@
     });
     
     return {
-      rects: treatments.map(function(tr) {
-	    return {
-	      type: 'rect',
-	      xref: 'x',
-	      yref: 'paper',
-	      x0: tr.start,
-	      x1: tr.end,
-	      y0: 0,
-	      y1: 0.1,
-	      line: {
-		    width: 0,
-	      },
-	      fillcolor: tr.color,
-	      opacity: 0.3,
-	    };
-      }),
+      rects: treatments.map(tr => ({
+	    type: 'rect',
+	    xref: 'x',
+	    yref: 'paper',
+	    x0: tr.start,
+	    x1: tr.end,
+	    y0: 0,
+	    y1: 0.1,
+	    line: {
+		  width: 0,
+	    },
+	    fillcolor: tr.color,
+	    opacity: 0.3,
+	  })),
       colorMap: colorMap
     };
   }

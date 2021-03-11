@@ -4,21 +4,15 @@
   export let data;
   export let keys;
 
-  let rawTable = data.map(function(v) {
-    return keys.map(function(k) {
-      return v[k];
-    });
-  });
+  let rawTable = data.map(v => keys.map(k => v[k]));
 
   function transformStops(rawtable) {
-    var newdata = []
+    let newdata = [];
 
-    rawtable.forEach(function(rawrow) {
+    rawtable.forEach(rawrow => {
       if (rawrow.length == keys.length) {
-        var item = {};
-        rawrow.forEach(function(v, i) {
-          item[keys[i]] = v;
-        });
+        let item = {};
+        rawrow.forEach((v, i) => item[keys[i]] = v);
         newdata.push(item);
       }      
     });
