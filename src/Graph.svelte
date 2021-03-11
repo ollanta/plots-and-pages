@@ -1,21 +1,23 @@
 <script>
   import Plotly from './Plotly.svelte';
 
-  export let ddPCR;
-  export let LD;
+  export let LeftAxis;
+  export let RightAxis;
   export let Observations;
   export let Treatments;
+
+  var example = LeftAxis.tables[0];
 
   var data;
 
   $: {
-    LD['yaxis'] = 'y2';
+    RightAxis.tables.forEach(d => d['yaxis'] = 'y2');
 
     var colorMap = getRectData(Treatments).colorMap;
     var colorMapDummies = Object.keys(colorMap).map(function(k) {
       return {
-        x: ddPCR.x,
-        y: ddPCR.y,
+        x: example.x,
+        y: example.y,
         showlegend: true,
         visible: 'legendonly',
         opacity: 0.8,
@@ -29,12 +31,13 @@
       }
     });
 
+
     data = [
-	  ddPCR,
-	  LD,
+	  ...LeftAxis.tables,
+	  ...RightAxis.tables,
       { // Dummy to force xaxis2 to show
-        x: ddPCR.x,
-        y: ddPCR.y,
+        x: example.x,
+        y: example.y,
         xaxis: 'x2',
         showlegend: false,
         opacity: 0,
@@ -62,11 +65,11 @@
 	    tickangle: 90,
 	  },
 	  yaxis: {
-	    title: 'Värde - ddPCR',
+	    title: LeftAxis.legend,
 	    rangemode: 'tozero',
 	  },
 	  yaxis2: {
-	    title: 'Värde - LD',
+	    title: RightAxis.legend,
 	    side: 'right',
 	    overlaying: 'y',
 	    rangemode: 'tozero',

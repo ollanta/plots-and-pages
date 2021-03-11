@@ -11,9 +11,6 @@
     });
   });
 
-  console.log(keys);
-  console.log(rawTable);
-
   function transformStops(rawtable) {
     var newdata = []
 

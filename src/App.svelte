@@ -1,16 +1,24 @@
 <script>
   import Graph from './Graph.svelte';
-  import PlotTable from './PlotTable.svelte';
+  import PlotTables from './PlotTables.svelte';
   import StopTable from './StopTable.svelte';
   
-  var ddPCR = {
-    x: ['2020-01-01', '2020-01-15', '2020-01-28'],
-    y: [1, 5, 6],
+  var LeftAxis = {
+    legend: "Värde - ddPCR",
+    tables: [{
+      x: ['2020-01-01', '2020-01-15', '2020-01-28'],
+      y: [1, 5, 6],
+      name: 'ddPCR',
+    }]
   };
 
-  var LD = 	{
-	x: ['2020-01-01', '2020-01-15', '2020-02-01'],
-	y: [2, 7, 5],
+  var RightAxis = {
+    legend: "Värde - LD",
+    tables: [{
+	  x: ['2020-01-01', '2020-01-15', '2020-02-01'],
+	  y: [2, 7, 5],
+      name: 'LD',
+    }]
   };
 
   var Observations = [
@@ -27,13 +35,13 @@
 
 <div style="display: flex;">
   <div style="display: flex; flex-direction: column; flex: 20%;">
-    <PlotTable bind:data={ddPCR} name="ddPCR"/>
-    <PlotTable bind:data={LD} name="LD"/>
+    <PlotTables bind:data={LeftAxis} name="Left axis data"/>
+    <PlotTables bind:data={RightAxis} name="Right axis data"/>
     <StopTable bind:data={Observations} name="Observations" keys="{['name', 'time']}"/>
     <StopTable bind:data={Treatments} name="Treatments" keys="{['name', 'start', 'end']}"/>
   </div>
 
   <div style="flex: 70%">
-    <Graph {ddPCR} {LD} {Observations} {Treatments}/>
+    <Graph {LeftAxis} {RightAxis} {Observations} {Treatments}/>
   </div>
 </div>

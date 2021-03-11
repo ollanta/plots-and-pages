@@ -9,25 +9,33 @@
   });
 
   function transformScatter(rawtable) {
-    var data = {
+    var xy = {
       x: [],
       y: [],
-      name: name,
     };
 
     rawtable.forEach(function(rawrow) {
       if (rawrow.length >= 2) {
-        data.x.push(rawrow[0]);
-        data.y.push(Number(rawrow[1]));
+        xy.x.push(rawrow[0]);
+        xy.y.push(Number(rawrow[1]));
       }      
     });
 
-    return data;
+    return xy;
   }
 
-  $: data = transformScatter(rawTable);
+  $: {
+    var xy = transformScatter(rawTable);
+    data.x = xy.x;
+    data.y = xy.y;
+  }
+
+  $: data.name = name;
   
 </script>
 
-<h3>{name}</h3>
+<div>
+  <input bind:value={name}/>
+  <slot></slot>
+</div>
 <Table bind:table={rawTable}/>
