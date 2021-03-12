@@ -46,6 +46,8 @@
   $: {
     let lineData = getLineData(Observations.tables);
     let rects = getRectData(Treatments).rects;
+    let ltickrange = getVariableTickRange(LeftAxis.tables);
+    let rtickrange = getFixedTickRange(RightAxis.tables, ltickrange.nticks);
 
     layout = {
 	  xaxis: {
@@ -64,13 +66,15 @@
 	  },
 	  yaxis: {
 	    title: LeftAxis.legend,
-	    rangemode: 'tozero',
+        range: ltickrange.range,
+        tickvals: ltickrange.tickvals,
 	  },
 	  yaxis2: {
 	    title: RightAxis.legend,
 	    side: 'right',
 	    overlaying: 'y',
-	    rangemode: 'tozero',
+        range: rtickrange.range,
+        tickvals: rtickrange.tickvals,
 	  },
       legend: {
         x: 1.05,
@@ -79,6 +83,52 @@
       },
 	  shapes: lineData.lines.concat(rects)
     };
+  }
+
+  function getVariableTickRange(tables) {
+    let maxy = Math.max(...tables.map(t => Math.max(...t.y)));
+    let expansionFactor = 1.1;
+    // let the max val be somewhat above the max tick
+    let contractedMaxy = 2 * maxy / (1+expansionFactor);
+
+    let one = Math.pow(10, Math.floor(Math.log10(contractedMaxy)));
+
+    let tickd;
+    let nTicks;
+    for (let base of [2, 1, 0.5, 0.2]) {
+      tickd = base * one;
+      if (Math.round(maxy / tickd) >= 4) {
+        nTicks = Math.ceil(maxy / tickd) + 1;
+        break;
+      }
+    }
+
+    return {
+      range: [0, tickd * (nTicks-1) * expansionFactor],
+      tickvals: [...Array(nTicks).keys()].map(i => i * tickd),
+      nticks: nTicks,
+    }
+  }
+
+  function getFixedTickRange(tables, nTicks) {
+    let maxy = Math.max(...tables.map(t => Math.max(...t.y)));
+    let expansionFactor = 1.1;
+    // let the max val be somewhat above the max tick
+    let contractedMaxy = 2 * maxy / (1+expansionFactor);
+
+    let one = Math.pow(10, Math.floor(Math.log10(contractedMaxy)));
+
+    let tickd;
+    for (let base of [1, 0.5, 0.1]) {
+      base *= one;
+      tickd = Math.ceil(contractedMaxy / (nTicks - 1) / base) * base;
+      if (tickd * (nTicks - 1) * 0.75 <= maxy) { break; }
+    }
+
+    return {
+      range: [0, tickd * (nTicks-1) * expansionFactor],
+      tickvals: [...Array(nTicks).keys()].map(i => i * tickd),
+    }
   }
 
   function getLineData(observations) {
