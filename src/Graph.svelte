@@ -46,8 +46,6 @@
   $: {
     let lineData = getLineData(Observations.tables);
     let rects = getRectData(Treatments).rects;
-    let ltickrange = getVariableTickRange(LeftAxis.tables);
-    let rtickrange = getFixedTickRange(RightAxis.tables, ltickrange.nticks);
 
     layout = {
 	  xaxis: {
@@ -64,18 +62,8 @@
 	    tickangle: 90,
 	    automargin: true,
 	  },
-	  yaxis: {
-	    title: LeftAxis.legend,
-        range: ltickrange.range,
-        tickvals: ltickrange.tickvals,
-	  },
-	  yaxis2: {
-	    title: RightAxis.legend,
-	    side: 'right',
-	    overlaying: 'y',
-        range: rtickrange.range,
-        tickvals: rtickrange.tickvals,
-	  },
+      yaxis: getLeftAxis(LeftAxis),
+      yaxis2: getRightAxis(LeftAxis, RightAxis),
       legend: {
         x: 1.05,
         itemclick: false,
@@ -83,6 +71,99 @@
       },
 	  shapes: lineData.lines.concat(rects)
     };
+  }
+
+  function getLeftAxis(leftAxis) {
+    if (!leftAxis.log) {
+      let ltickrange = getVariableTickRange(leftAxis.tables);
+
+      return {
+        title: leftAxis.legend,
+        range: ltickrange.range,
+        tickvals: ltickrange.tickvals,
+      };
+    } else {
+      let ltickrange = getVariableLogTickRange(leftAxis.tables);
+
+      return {
+        type: 'log',
+        title: leftAxis.legend,
+        range: ltickrange.range,
+        tickvals: ltickrange.tickvals,
+      };
+    }
+  }
+
+  function getRightAxis(leftAxis, rightAxis) {
+    if (!leftAxis.log) {
+      let ltickrange = getVariableTickRange(leftAxis.tables);
+      let rtickrange = getFixedTickRange(rightAxis.tables, ltickrange.nticks);
+
+      return {
+	    title: rightAxis.legend,
+	    side: 'right',
+	    overlaying: 'y',
+        range: rtickrange.range,
+        tickvals: rtickrange.tickvals,
+	  };
+    } else {
+      let ltickrange = getVariableLogTickRange(leftAxis.tables);
+      let rtickrange = getFixedLogTickRange(rightAxis.tables, ltickrange.nTicks);
+
+      return {
+        type: 'log',
+        title: rightAxis.legend,
+	    side: 'right',
+	    overlaying: 'y',
+        range: rtickrange.range,
+        tickvals: rtickrange.tickvals,
+      }
+    }
+  }
+
+  function getVariableLogTickRange(tables) {
+    let maxy = Math.max(...tables.map(t => Math.max(...t.y)));
+    let miny = Math.min(...tables.map(t => Math.min(...t.y)));
+
+    if (miny <= 0) {
+      return {
+        range: [0, Math.log10(maxy)],
+        tickvals: [0, Math.log10(maxy)],
+      }
+    }
+
+    let logmax = Math.ceil(Math.log10(maxy));
+    let logmin = Math.floor(Math.log10(miny));
+    let size = logmax - logmin
+
+    // TODO: limit number of tickvals
+
+    return {
+      range: [logmin - size * 0.1, logmax + size * 0.1],
+      tickvals: [...Array(1+size).keys()].map(i => Math.pow(10, logmin+i)),
+      nTicks: size+1
+    }
+  }
+
+  function getFixedLogTickRange(tables, nTicks) {
+    let maxy = Math.max(...tables.map(t => Math.max(...t.y)));
+    let miny = Math.min(...tables.map(t => Math.min(...t.y)));
+
+    if (miny <= 0) {
+      return {
+        range: [0, Math.log10(maxy)],
+        tickvals: [0, Math.log10(maxy)],
+      }
+    }
+
+    let logmax = Math.ceil(Math.log10(maxy));
+    let logmin = Math.floor(Math.log10(miny));
+    let size = logmax - logmin
+
+    return {
+      range: [logmin - size * 0.1, logmax + size * 0.1],
+      tickvals: [...Array(nTicks).keys()].map(i => Math.pow(10, logmin+i*size/(nTicks-1))),
+    }
   }
 
   function getVariableTickRange(tables) {

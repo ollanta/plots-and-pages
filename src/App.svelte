@@ -6,6 +6,7 @@
   
   let LeftAxis = {
     legend: "Värde - ddPCR",
+    log: false,
     tables: [{
       x: ['2020-01-01', '2020-01-15', '2020-01-28'],
       y: [1, 5, 6],

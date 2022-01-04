@@ -3,6 +3,7 @@
 
   export let data;
   let legend = data.legend;
+  let log = data.log;
 
   let nextId = 1;
   data.tables.forEach(t => t.id = nextId++);
@@ -24,10 +25,14 @@
     data.tables = data.tables;
   }
 
-  $: data.legend = legend;
+  $: {
+    data.legend = legend;
+    data.log = log;
+  }
 </script>
 
 <input bind:value={legend}/>
+{#if log != null}<div>Log input: <input name="loginput" type=checkbox bind:checked={log}/></div>{/if}
 {#each data.tables as table, idx (table.id)}
   <PlotTable bind:data={table}>
     <button on:click="{() => removeTable(idx)}" disabled="{data.tables.length == 1}">-</button>
