@@ -1,6 +1,7 @@
 <script>
   import Plotly from './Plotly.svelte';
 
+  export let MainSettings;
   export let LeftAxis;
   export let RightAxis;
   export let Observations;
@@ -48,9 +49,10 @@
     let rects = getRectData(Treatments).rects;
 
     layout = {
+      title: MainSettings.title,
 	  xaxis: {
 	    side: 'top',
-	    tickformat: '%Y-%m-%d',
+	    tickformat: MainSettings.xdays ? '' : '%Y-%m-%d',
 	  },
 	  xaxis2: {
 	    side: 'bottom',
@@ -62,8 +64,8 @@
 	    tickangle: 90,
 	    automargin: true,
 	  },
-      yaxis: getLeftAxis(LeftAxis),
-      yaxis2: getRightAxis(LeftAxis, RightAxis),
+      yaxis: getLeftAxis(MainSettings, LeftAxis),
+      yaxis2: getRightAxis(MainSettings, LeftAxis, RightAxis),
       legend: {
         x: 1.05,
         itemclick: false,
@@ -73,8 +75,8 @@
     };
   }
 
-  function getLeftAxis(leftAxis) {
-    if (!leftAxis.log) {
+  function getLeftAxis(mainSettings, leftAxis) {
+    if (!mainSettings.log) {
       let ltickrange = getVariableTickRange(leftAxis.tables);
 
       return {
@@ -94,8 +96,8 @@
     }
   }
 
-  function getRightAxis(leftAxis, rightAxis) {
-    if (!leftAxis.log) {
+  function getRightAxis(mainSettings, leftAxis, rightAxis) {
+    if (!mainSettings.log) {
       let ltickrange = getVariableTickRange(leftAxis.tables);
       let rtickrange = getFixedTickRange(rightAxis.tables, ltickrange.nticks);
 

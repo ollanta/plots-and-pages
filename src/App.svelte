@@ -3,14 +3,19 @@
   import PlotTables from './PlotTables.svelte';
   import StopTable from './StopTable.svelte';
   import StopTables from './StopTables.svelte';
+  import PlotSettings from './PlotSettings.svelte';
   
-  let LeftAxis, RightAxis, Observations, Treatments;
+  let MainSettings, LeftAxis, RightAxis, Observations, Treatments;
 
   function loadDummyData() {
     return {
+      MainSettings: {
+        title: '',
+        log: false,
+        xdays: false,
+      },
       LeftAxis: {
         legend: "Värde - ddPCR",
-        log: false,
         tables: [{
           x: ['2020-01-01', '2020-01-15', '2020-01-28'],
           y: [1, 5, 6],
@@ -45,14 +50,23 @@
     const data = url.searchParams.get('d');
 
     if (data) {
-      return JSON.parse(atob(decodeURIComponent(data)));
+      const parsed = JSON.parse(atob(decodeURIComponent(data)));
+      // version conversion
+      if (parsed.MainSettings == undefined) {
+        parsed.MainSettings = {
+          title: '',
+          log: parsed.LeftAxis.log,
+          xdays: false,
+        }
+      }
+      return parsed
     }
   }
 
   function toUrlWithQueryData() {
     const url = new URL(window.location);
     const data =  encodeURIComponent(btoa(JSON.stringify(
-      {LeftAxis, RightAxis, Observations, Treatments}
+      {MainSettings, LeftAxis, RightAxis, Observations, Treatments}
     )));
 
     url.searchParams.set('d', data);
@@ -62,7 +76,7 @@
   function loadData() {
     const data = getQueryData();
 
-    ({ LeftAxis, RightAxis, Observations, Treatments } = data || loadDummyData());
+    ({ MainSettings, LeftAxis, RightAxis, Observations, Treatments } = data || loadDummyData());
   }
 
   loadData();
@@ -71,6 +85,8 @@
 
 <div style="display: flex;">
   <div style="display: flex; flex-direction: column; flex: 20%;">
+    <h3>Main settings</h3>
+    <PlotSettings bind:data={MainSettings}/>
     <h3>Left axis data</h3>
     <PlotTables bind:data={LeftAxis}/>
     <h3>Right axis data</h3>
@@ -82,7 +98,7 @@
   </div>
 
   <div style="flex: 70%">
-    <Graph {LeftAxis} {RightAxis} {Observations} {Treatments}/>
+    <Graph {MainSettings} {LeftAxis} {RightAxis} {Observations} {Treatments}/>
     <button on:click="{() => navigator.clipboard.writeText(toUrlWithQueryData())}">Copy link to clipboard</button>
   </div>
 </div>
