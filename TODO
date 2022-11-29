@@ -5,3 +5,7 @@ Senare:
 - Bättre layout
 - Testa d3 för att undvika alla hacks
 - Typescript
+
+Buggar:
+- Högeraxeln blir trasig om man har log-input och konstant "vänster"-kurva
+- Hantera 0-värden i log-input?

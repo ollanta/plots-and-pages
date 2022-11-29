@@ -177,7 +177,7 @@
     let one = Math.pow(10, Math.floor(Math.log10(contractedMaxy)));
 
     let tickd;
-    let nTicks;
+    let nTicks = 2; // A default number of ticks if the search fails
     for (let base of [2, 1, 0.5, 0.2]) {
       tickd = base * one;
       if (Math.round(maxy / tickd) >= 4) {
